@@ -3,7 +3,7 @@
 > ### Nitro + Prisma + Zod codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/realworld-apps/realworld) spec and API.
 
 
-### [Demo (of another codebase)](https://demo.realworld.how/)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/realworld-apps/realworld)
+### [Demo (of another codebase)](https://demo.realworld.show/)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/realworld-apps/realworld)
 
 This codebase was created to demonstrate a fully fledged fullstack application built with [Nitro](https://nitro.build), [Prisma](https://www.prisma.io), and [Zod](https://zod.dev) including CRUD operations, authentication, routing, pagination, and more.
 
