@@ -1,4 +1,5 @@
 .PHONY: help \
+	submodule \
 	setup-install-dependencies \
 	setup-nitro-prepare \
 	setup-db-generate \
@@ -17,6 +18,7 @@
 
 help:
 	@echo "Setup:"
+	@echo "  submodule"
 	@echo "  setup"
 	@echo ""
 	@echo "Run:"
@@ -30,6 +32,12 @@ help:
 	@echo "Cleaning:"
 	@echo "  running-processes-clean"
 	@echo "  non-default-files-clean"
+
+########################
+# Submodule
+
+submodule:
+	git submodule init; git submodule update
 
 ########################
 # Setup
@@ -72,7 +80,7 @@ unit-test:
 # Tests
 
 test-with-hurl-and-already-launched-server:
-	HOST=http://localhost:3000 specs/run-api-tests-hurl.sh
+	HOST=http://localhost:3000 realworld/specs/api/run-api-tests-hurl.sh
 
 test-with-hurl:
 	@set -e; \
@@ -88,7 +96,7 @@ test-with-hurl:
 	)
 
 test-with-bruno-and-already-launched-server:
-	HOST=http://localhost:3000 specs/run-api-tests-bruno.sh
+	HOST=http://localhost:3000 realworld/specs/api/run-api-tests-bruno.sh
 
 test-with-bruno:
 	@set -e; \

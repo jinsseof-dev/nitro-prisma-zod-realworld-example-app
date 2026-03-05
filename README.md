@@ -34,9 +34,11 @@ As this repository only covers the API part, you may then [connect a frontend to
 1. Clone the Git repository
 
 ```shell
-git clone https://github.com/c4ffein/nitro-prisma-zod-realworld-example-app.git
+git clone --recurse-submodules https://github.com/c4ffein/nitro-prisma-zod-realworld-example-app.git
 cd nitro-prisma-zod-realworld-example-app
 ```
+
+If you already cloned without `--recurse-submodules`, run `make submodule` to fetch the [test specs](https://github.com/realworld-apps/realworld).
 
 2. Install [Bun](https://bun.sh) if not already installed
 
