@@ -34,20 +34,16 @@ export default definePrivateEventHandler(async (event, {auth}) => {
 
     const newSlug = article.title ? `${slugify(article.title)}-${crypto.randomUUID().slice(0, 8)}` : null;
 
-    const tagList =
-        Array.isArray(article.tagList) && article.tagList?.length
-            ? article.tagList.map((tag: string) => ({
-                create: { name: tag },
-                where: { name: tag },
-            }))
-            : [];
+    const hasTagList = Array.isArray(article.tagList);
 
     try {
         const updatedArticle = await usePrisma().$transaction(async (tx) => {
-            await tx.article.update({
-                where: { slug },
-                data: { tagList: { set: [] } },
-            });
+            if (hasTagList) {
+                await tx.article.update({
+                    where: { slug },
+                    data: { tagList: { set: [] } },
+                });
+            }
 
             return tx.article.update({
                 where: { slug },
@@ -58,9 +54,14 @@ export default definePrivateEventHandler(async (event, {auth}) => {
                     ...(newSlug ? { slug: newSlug } : {}),
                     updatedAt: new Date(),
                     // connectOrCreate issues one SELECT + conditional INSERT per tag (not batched, but ok for now)
-                    tagList: {
-                        connectOrCreate: tagList,
-                    },
+                    ...(hasTagList ? {
+                        tagList: {
+                            connectOrCreate: article.tagList.map((tag: string) => ({
+                                create: { name: tag },
+                                where: { name: tag },
+                            })),
+                        },
+                    } : {}),
                 },
                 include: {
                     tagList: {
