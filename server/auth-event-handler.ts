@@ -2,9 +2,7 @@ import HttpException from '~/models/http-exception.model';
 import { useVerifyToken } from '~/utils/verify-token';
 
 export interface PrivateContext {
-  auth: {
-    id: number;
-  };
+  auth: { id: number } | null;
 }
 
 export function definePrivateEventHandler<T>(

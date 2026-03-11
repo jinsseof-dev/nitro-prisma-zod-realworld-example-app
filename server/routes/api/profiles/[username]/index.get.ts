@@ -11,7 +11,7 @@ export default definePrivateEventHandler(
         username,
       },
       include: {
-        followedBy: true,
+        followedBy: { select: { id: true } },
       },
     });
 
