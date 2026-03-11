@@ -10,27 +10,24 @@ import HttpException from '~/models/http-exception.model';
  * @param fieldErrors - Map of DB column name to user-facing error messages.
  *                      If the violated field is not in the map, all messages are returned.
  */
-export function handleUniqueConstraintError(
-    e: unknown,
-    fieldErrors: Record<string, string[]>,
-): void {
-    if (!(e instanceof PrismaClientKnownRequestError) || e.code !== 'P2002') {
-        return;
+export function handleUniqueConstraintError(e: unknown, fieldErrors: Record<string, string[]>): void {
+  if (!(e instanceof PrismaClientKnownRequestError) || e.code !== 'P2002') {
+    return;
+  }
+
+  const target = e.meta?.target as string[] | undefined;
+  const errors: Record<string, string[]> = {};
+
+  if (target) {
+    for (const [field, messages] of Object.entries(fieldErrors)) {
+      if (target.includes(field)) {
+        errors[field] = messages;
+      }
     }
+  }
 
-    const target = e.meta?.target as string[] | undefined;
-    const errors: Record<string, string[]> = {};
-
-    if (target) {
-        for (const [field, messages] of Object.entries(fieldErrors)) {
-            if (target.includes(field)) {
-                errors[field] = messages;
-            }
-        }
-    }
-
-    // If no specific field matched, return all provided errors
-    throw new HttpException(409, {
-        errors: Object.keys(errors).length > 0 ? errors : fieldErrors,
-    });
+  // If no specific field matched, return all provided errors
+  throw new HttpException(409, {
+    errors: Object.keys(errors).length > 0 ? errors : fieldErrors,
+  });
 }

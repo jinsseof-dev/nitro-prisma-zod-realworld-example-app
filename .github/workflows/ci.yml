@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Prepare Nitro types
+        run: bunx nitropack prepare
+
+      - name: Generate Prisma client
+        run: bunx prisma generate
+
+      - name: Lint
+        run: bunx eslint .
+
+      - name: Format check
+        run: bunx prettier --check .
+
+      - name: Unit tests
+        run: bun test
+
+      - name: Unit tests with coverage
+        run: bun test --coverage

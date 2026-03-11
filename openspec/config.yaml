@@ -1,0 +1,13 @@
+schema: spec-driven
+
+context: |
+  Tech stack: TypeScript, Bun runtime, Nitro framework (file-based routing), Prisma v7 + SQLite (libsql), Zod validation, JWT + bcryptjs auth
+  Project: RealWorld API implementation (Medium clone backend) following the RealWorld spec
+  Package manager: Bun (not npm/yarn)
+  Test runner: bun test (bun:test)
+  Code quality: ESLint v9 + Prettier + Husky pre-commit hooks
+  CI/CD: GitHub Actions (test-hurl.yml for integration tests, ci.yml for lint/test/coverage)
+  Source directory: server/ with file-based routing in server/routes/api/
+  Database: Prisma schema at prisma/schema.prisma, models: User, Article, Comment, Tag
+  Path alias: ~/ resolves to server/ directory
+  Conventions: Zod schemas in server/schemas/, HttpException for API errors, Prisma client via usePrisma() singleton
