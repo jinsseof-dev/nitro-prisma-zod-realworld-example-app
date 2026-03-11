@@ -6,6 +6,7 @@ export default definePrivateEventHandler(
     const query = getQuery(event);
 
     const andQueries = buildFindAllQuery(query, auth);
+    const { skip, take } = parsePagination(query as { offset?: string; limit?: string });
     const articlesCount = await usePrisma().article.count({
       where: {
         AND: andQueries,
@@ -20,8 +21,8 @@ export default definePrivateEventHandler(
       orderBy: {
         createdAt: 'desc',
       },
-      skip: Number(query.offset) || 0,
-      take: Number(query.limit) || 10,
+      skip,
+      take,
       include: {
         tagList: {
           orderBy: {

@@ -3,6 +3,7 @@ import { definePrivateEventHandler } from '~/auth-event-handler';
 
 export default definePrivateEventHandler(async (event, { auth }) => {
   const query = getQuery(event);
+  const { skip, take } = parsePagination(query as { offset?: string; limit?: string });
   const articlesCount = await usePrisma().article.count({
     where: {
       author: {
@@ -20,8 +21,8 @@ export default definePrivateEventHandler(async (event, { auth }) => {
     orderBy: {
       createdAt: 'desc',
     },
-    skip: Number(query.offset) || 0,
-    take: Number(query.limit) || 10,
+    skip,
+    take,
     omit: {
       body: true,
     },
