@@ -116,6 +116,12 @@ Prisma v7 + SQLite (libsql 어댑터). 스키마: `prisma/schema.prisma`:
 - **`dev-workflow.md`**: 개발 환경 설정, 테스트, 코드 품질 도구, CI/CD 파이프라인
 - **`claude-skills.md`**: Claude Code 커스텀 스킬 가이드 (`/bugfix`, `/write-test`, `/code-review`)
 
+## 작업 규칙
+
+- **병렬 실행 우선**: 독립적인 작업은 항상 병렬로 수행한다. 파일 읽기, 검색, 테스트 실행, CI 워크플로우 감시 등 서로 의존성이 없는 작업은 동시에 실행한다.
+- **백그라운드 실행**: 빌드, 테스트, CI 감시 등 오래 걸리는 작업은 `run_in_background`로 실행하고 결과를 나중에 확인한다.
+- **에이전트 병렬 위임**: 여러 파일에 걸친 변경이나 독립적인 조사가 필요하면 Agent를 병렬로 실행한다.
+
 ## CI
 
 메인 브랜치에 push/PR 시 두 개의 GitHub Actions 워크플로우가 실행:
