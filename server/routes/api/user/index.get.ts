@@ -1,10 +1,10 @@
-import { User } from '~/models/user.model';
 import { definePrivateEventHandler } from '~/auth-event-handler';
+import HttpException from '~/models/http-exception.model';
 
 export default definePrivateEventHandler(async (event, { auth }) => {
-  const user = (await usePrisma().user.findUnique({
+  const user = await usePrisma().user.findUnique({
     where: {
-      id: auth.id,
+      id: auth!.id,
     },
     select: {
       id: true,
@@ -13,7 +13,11 @@ export default definePrivateEventHandler(async (event, { auth }) => {
       bio: true,
       image: true,
     },
-  })) as User;
+  });
+
+  if (!user) {
+    throw new HttpException(404, { errors: { user: ['not found'] } });
+  }
 
   return {
     user: {

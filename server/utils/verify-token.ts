@@ -4,7 +4,7 @@ import { getJwtSecret } from './jwt-secret';
 
 export const useVerifyToken = (token: string): { id: number } => {
   try {
-    const decoded = jwt.verify(token, getJwtSecret()) as { user: { id: number } };
+    const decoded = jwt.verify(token, getJwtSecret(), { algorithms: ['HS256'] }) as { user: { id: number } };
     return { id: Number(decoded.user.id) };
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {

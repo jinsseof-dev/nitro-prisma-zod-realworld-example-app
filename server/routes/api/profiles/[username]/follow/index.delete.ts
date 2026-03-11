@@ -25,7 +25,7 @@ export default definePrivateEventHandler(async (event, { auth }) => {
       },
     },
     include: {
-      followedBy: true,
+      followedBy: { select: { id: true } },
     },
   });
 
