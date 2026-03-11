@@ -33,13 +33,13 @@ export default definePrivateEventHandler(
       throw new HttpException(404, { errors: { article: ['not found'] } });
     }
 
-    const result = article.comments.map((comment: any) => ({
+    const result = article.comments.map((comment) => ({
       ...comment,
       author: {
         username: comment.author.username,
         bio: comment.author.bio,
         image: comment.author.image,
-        following: comment.author.followedBy.some((follow: any) => follow.id === auth?.id),
+        following: comment.author.followedBy.some((follow) => follow.id === auth?.id),
       },
     }));
 

@@ -49,15 +49,15 @@ export default definePrivateEventHandler(
     });
 
     return {
-      articles: articles.map((article: any) => articleMapper(article, auth?.id)),
+      articles: articles.map((article) => articleMapper(article, auth?.id)),
       articlesCount,
     };
   },
   { requireAuth: false },
 );
 
-const buildFindAllQuery = (query: any, auth: { id: number } | undefined) => {
-  const queries: any = [];
+const buildFindAllQuery = (query: Record<string, string>, auth: { id: number } | undefined) => {
+  const queries: object[] = [];
 
   if ('author' in query) {
     queries.push({

@@ -49,7 +49,7 @@ export default definePrivateEventHandler(async (event, { auth }) => {
     ...article,
     author: profileMapper(article.author, auth.id),
     tagList: article?.tagList.map((tag: Tag) => tag.name),
-    favorited: article.favoritedBy.some((favorited: any) => favorited.id === auth.id),
+    favorited: article.favoritedBy.some((favorited) => favorited.id === auth.id),
     favoritesCount: _count?.favoritedBy,
   };
 
