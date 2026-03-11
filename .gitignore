@@ -7,3 +7,9 @@ dist
 .env
 dev.db
 generated
+
+# Local environment
+.claude/settings.local.json
+.claude/skills/
+.omc/
+package-lock.json
