@@ -74,7 +74,7 @@ run:  # WARNING clearly not production ready
 # Unit Tests
 
 unit-test:
-	bun test server/
+	bun test
 
 ########################
 # Tests
