@@ -1,14 +1,6 @@
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import jwt from 'jsonwebtoken';
-
-// verify-token.ts uses Nitro's auto-imported createError, so we need to provide it globally
-globalThis.createError = (input: any) => {
-  const err = new Error(input.statusMessage) as any;
-  err.status = input.status;
-  err.statusMessage = input.statusMessage;
-  err.data = input.data;
-  return err;
-};
+import HttpException from '~/models/http-exception.model';
 
 const TEST_SECRET = 'test-secret-for-unit-tests';
 
@@ -36,35 +28,38 @@ describe('useVerifyToken', () => {
     expect(result).toEqual({ id: 42 });
   });
 
-  test('throws 401 for an expired token', () => {
+  test('throws HttpException 401 for an expired token', () => {
     const token = jwt.sign({ user: { id: 1 } }, TEST_SECRET, { expiresIn: '-1s' });
     try {
       useVerifyToken(token);
       throw new Error('should have thrown');
-    } catch (e: any) {
-      expect(e.status).toBe(401);
-      expect(e.data.errors.token).toEqual(['has expired']);
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpException);
+      expect((e as HttpException).errorCode).toBe(401);
+      expect((e as HttpException).body).toEqual({ errors: { token: ['has expired'] } });
     }
   });
 
-  test('throws 401 for a malformed token', () => {
+  test('throws HttpException 401 for a malformed token', () => {
     try {
       useVerifyToken('not-a-real-token');
       throw new Error('should have thrown');
-    } catch (e: any) {
-      expect(e.status).toBe(401);
-      expect(e.data.errors.token).toEqual(['is invalid']);
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpException);
+      expect((e as HttpException).errorCode).toBe(401);
+      expect((e as HttpException).body).toEqual({ errors: { token: ['is invalid'] } });
     }
   });
 
-  test('throws 401 for a token signed with wrong secret', () => {
+  test('throws HttpException 401 for a token signed with wrong secret', () => {
     const token = jwt.sign({ user: { id: 1 } }, 'wrong-secret', { expiresIn: '1h' });
     try {
       useVerifyToken(token);
       throw new Error('should have thrown');
-    } catch (e: any) {
-      expect(e.status).toBe(401);
-      expect(e.data.errors.token).toEqual(['is invalid']);
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpException);
+      expect((e as HttpException).errorCode).toBe(401);
+      expect((e as HttpException).body).toEqual({ errors: { token: ['is invalid'] } });
     }
   });
 
@@ -75,13 +70,27 @@ describe('useVerifyToken', () => {
     expect(typeof result.id).toBe('number');
   });
 
-  test('throws 401 for a completely empty string token', () => {
+  test('throws HttpException 401 for a completely empty string token', () => {
     try {
       useVerifyToken('');
       throw new Error('should have thrown');
-    } catch (e: any) {
-      expect(e.status).toBe(401);
-      expect(e.data.errors.token).toEqual(['is invalid']);
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpException);
+      expect((e as HttpException).errorCode).toBe(401);
+      expect((e as HttpException).body).toEqual({ errors: { token: ['is invalid'] } });
+    }
+  });
+
+  test('re-throws non-JWT errors as-is', () => {
+    const original = process.env.JWT_SECRET;
+    delete process.env.JWT_SECRET;
+    try {
+      const token = jwt.sign({ user: { id: 1 } }, 'any-secret');
+      expect(() => useVerifyToken(token)).toThrow('JWT_SECRET environment variable is not set');
+    } finally {
+      if (original !== undefined) {
+        process.env.JWT_SECRET = original;
+      }
     }
   });
 });

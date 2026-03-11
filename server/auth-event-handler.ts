@@ -1,3 +1,4 @@
+import HttpException from '~/models/http-exception.model';
 import { useVerifyToken } from '~/utils/verify-token';
 
 export interface PrivateContext {
@@ -19,11 +20,7 @@ export function definePrivateEventHandler<T>(
     }
 
     if (options.requireAuth && !token) {
-      throw createError({
-        status: 401,
-        statusMessage: 'Unauthorized',
-        data: { errors: { token: ['is missing'] } },
-      });
+      throw new HttpException(401, { errors: { token: ['is missing'] } });
     }
 
     if (token) {

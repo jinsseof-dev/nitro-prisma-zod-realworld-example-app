@@ -29,7 +29,7 @@ describe('handleUniqueConstraintError', () => {
     ).toThrow(
       expect.objectContaining({
         errorCode: 409,
-        message: { errors: { email: ['has already been taken'] } },
+        body: { errors: { email: ['has already been taken'] } },
       }),
     );
   });
@@ -43,7 +43,7 @@ describe('handleUniqueConstraintError', () => {
     ).toThrow(
       expect.objectContaining({
         errorCode: 409,
-        message: { errors: { title: ['has already been taken'] } },
+        body: { errors: { title: ['has already been taken'] } },
       }),
     );
   });
@@ -58,7 +58,7 @@ describe('handleUniqueConstraintError', () => {
     ).toThrow(
       expect.objectContaining({
         errorCode: 409,
-        message: { errors: { email: ['taken'], username: ['taken'] } },
+        body: { errors: { email: ['taken'], username: ['taken'] } },
       }),
     );
   });
@@ -72,7 +72,7 @@ describe('handleUniqueConstraintError', () => {
     ).toThrow(
       expect.objectContaining({
         errorCode: 409,
-        message: { errors: { email: ['has already been taken'] } },
+        body: { errors: { email: ['has already been taken'] } },
       }),
     );
   });
