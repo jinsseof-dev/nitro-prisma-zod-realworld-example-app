@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import HttpException from '~/models/http-exception.model';
 import { getJwtSecret } from './jwt-secret';
 
 export const useVerifyToken = (token: string): { id: number } => {
@@ -7,18 +8,10 @@ export const useVerifyToken = (token: string): { id: number } => {
     return { id: Number(decoded.user.id) };
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      throw createError({
-        status: 401,
-        statusMessage: 'Unauthorized',
-        data: { errors: { token: ['has expired'] } },
-      });
+      throw new HttpException(401, { errors: { token: ['has expired'] } });
     }
     if (error instanceof jwt.JsonWebTokenError) {
-      throw createError({
-        status: 401,
-        statusMessage: 'Unauthorized',
-        data: { errors: { token: ['is invalid'] } },
-      });
+      throw new HttpException(401, { errors: { token: ['is invalid'] } });
     }
     throw error;
   }

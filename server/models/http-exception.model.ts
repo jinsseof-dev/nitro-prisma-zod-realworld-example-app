@@ -1,11 +1,14 @@
+export interface ErrorBody {
+  errors: Record<string, string[]>;
+}
+
 class HttpException extends Error {
   errorCode: number;
-  constructor(
-    errorCode: number,
-    public readonly message: string | any,
-  ) {
-    super(message);
+  body: ErrorBody;
+  constructor(errorCode: number, body: ErrorBody) {
+    super(JSON.stringify(body));
     this.errorCode = errorCode;
+    this.body = body;
   }
 }
 

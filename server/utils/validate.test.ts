@@ -32,9 +32,9 @@ describe('validateBody', () => {
       validateBody(testSchema, { user: { name: '', email: 'bad' } });
       throw new Error('should have thrown');
     } catch (e: any) {
-      expect(e.message.errors).toBeDefined();
-      expect(e.message.errors.name).toBeInstanceOf(Array);
-      expect(e.message.errors.email).toBeInstanceOf(Array);
+      expect(e.body.errors).toBeDefined();
+      expect(e.body.errors.name).toBeInstanceOf(Array);
+      expect(e.body.errors.email).toBeInstanceOf(Array);
     }
   });
 
@@ -85,7 +85,7 @@ describe('validateBody', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(HttpException);
       expect(e.errorCode).toBe(422);
-      expect(e.message.errors.body).toBeInstanceOf(Array);
+      expect(e.body.errors.body).toBeInstanceOf(Array);
     }
   });
 });
