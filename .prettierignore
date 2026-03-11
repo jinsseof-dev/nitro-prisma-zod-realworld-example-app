@@ -1,0 +1,9 @@
+node_modules
+.nitro
+.output
+dist
+bun.lock
+prisma/migrations
+generated
+realworld
+.omc
