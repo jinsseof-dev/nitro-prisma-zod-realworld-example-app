@@ -46,7 +46,7 @@ setup-install-dependencies:
 	bun install
 
 setup-nitro-prepare:
-	bun run prepare
+	bunx nitropack prepare
 
 setup-db-generate:
 	bun run db:generate

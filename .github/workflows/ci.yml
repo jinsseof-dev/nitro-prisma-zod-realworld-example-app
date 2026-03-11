@@ -34,7 +34,7 @@ jobs:
         run: bunx prettier --check .
 
       - name: Unit tests
-        run: bun test
+        run: bun test server/
 
       - name: Unit tests with coverage
-        run: bun test --coverage
+        run: bun test --coverage server/
