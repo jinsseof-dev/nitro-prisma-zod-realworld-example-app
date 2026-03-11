@@ -49,10 +49,10 @@ setup-nitro-prepare:
 	bunx nitropack prepare
 
 setup-db-generate:
-	bun run db:generate
+	bunx prisma generate
 
 setup-db-push:
-	bun run db:push
+	bunx prisma db push
 
 setup:
 	make setup-install-dependencies
@@ -68,13 +68,13 @@ setup:
 # Run
 
 run:  # WARNING clearly not production ready
-	JWT_SECRET=dxLmhnE0pRY2+vUlu+i5Pxh8LTxLBTgBWdp82W74mMs= bun run dev
+	JWT_SECRET=dxLmhnE0pRY2+vUlu+i5Pxh8LTxLBTgBWdp82W74mMs= bunx nitro dev
 
 ########################
 # Unit Tests
 
 unit-test:
-	bun test
+	bun test server/
 
 ########################
 # Tests
@@ -84,7 +84,7 @@ test-with-hurl-and-already-launched-server:
 
 test-with-hurl:
 	@set -e; \
-	(JWT_SECRET=dxLmhnE0pRY2+vUlu+i5Pxh8LTxLBTgBWdp82W74mMs= bun --silent run dev) & \
+	(JWT_SECRET=dxLmhnE0pRY2+vUlu+i5Pxh8LTxLBTgBWdp82W74mMs= bunx nitro dev) & \
 	SERVER_PID=$$!; \
 	trap "kill $$SERVER_PID 2>/dev/null || true" EXIT; \
 	sleep 3; \
@@ -100,7 +100,7 @@ test-with-bruno-and-already-launched-server:
 
 test-with-bruno:
 	@set -e; \
-	(JWT_SECRET=dxLmhnE0pRY2+vUlu+i5Pxh8LTxLBTgBWdp82W74mMs= bun --silent run dev) & \
+	(JWT_SECRET=dxLmhnE0pRY2+vUlu+i5Pxh8LTxLBTgBWdp82W74mMs= bunx nitro dev) & \
 	SERVER_PID=$$!; \
 	trap "kill $$SERVER_PID 2>/dev/null || true" EXIT; \
 	sleep 3; \
