@@ -1,9 +1,10 @@
+import type { NitroErrorHandler } from 'nitropack/types';
 import HttpException from './models/http-exception.model';
 
-export default async function (error: any, event: any) {
+const errorHandler: NitroErrorHandler = async function (error, event) {
   const cause = error.cause ?? error;
   let statusCode: number;
-  let body: any;
+  let body: { errors: Record<string, string[]> } | { message: string } | string;
 
   if (cause instanceof HttpException) {
     statusCode = cause.errorCode;
@@ -18,4 +19,6 @@ export default async function (error: any, event: any) {
   setResponseStatus(event, statusCode);
   setResponseHeader(event, 'content-type', 'application/json');
   await send(event, JSON.stringify(body));
-}
+};
+
+export default errorHandler;

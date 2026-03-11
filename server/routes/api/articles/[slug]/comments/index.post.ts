@@ -57,7 +57,7 @@ export default definePrivateEventHandler(async (event, { auth }) => {
         username: createdComment.author.username,
         bio: createdComment.author.bio,
         image: createdComment.author.image,
-        following: createdComment.author.followedBy.some((follow: any) => follow.id === auth.id),
+        following: createdComment.author.followedBy.some((follow) => follow.id === auth.id),
       },
     },
   };

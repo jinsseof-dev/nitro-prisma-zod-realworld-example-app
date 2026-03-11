@@ -8,7 +8,7 @@ export default definePrivateEventHandler(async (event, { auth }) => {
 
   const { email, username, password, image, bio } = user;
 
-  const data: any = {};
+  const data: Partial<{ username: string; email: string; bio: string; image: string; password: string }> = {};
   if (email !== undefined) data.email = email;
   if (username !== undefined) data.username = username;
   if (password) data.password = await useHashPassword(password);
